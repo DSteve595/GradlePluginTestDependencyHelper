@@ -1,0 +1,12 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+java {
+    withJavadocJar()
+}
+
+publishing.publications.register(name, MavenPublication) {
+    from components.java
+}
