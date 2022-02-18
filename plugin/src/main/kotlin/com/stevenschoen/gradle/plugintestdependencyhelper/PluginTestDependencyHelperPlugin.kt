@@ -92,11 +92,14 @@ abstract class TestHelperSourceGenerationTask : DefaultTask() {
 
     outputPackageDir.resolve("PluginTestDependencyHelper.java")
       .writeText(
+        //language=java
         """
           package com.stevenschoen.gradle.plugintestdependencyhelper;
           
           public class PluginTestDependencyHelper {
-            public static final String repository = "maven { url = uri(\"$pluginTestMavenRepoPath\") }";
+            public static final String repositoryPath = "$pluginTestMavenRepoPath";
+            public static final String repositoryDeclaration =
+              "maven { url = uri(\"$pluginTestMavenRepoPath\") }";
             public static final String pluginVersion = "$pluginVersion";
           }
         """.trimIndent()
