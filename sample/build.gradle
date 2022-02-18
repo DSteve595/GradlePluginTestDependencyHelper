@@ -1,0 +1,25 @@
+plugins {
+    id("java-gradle-plugin")
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    id("com.stevenschoen.gradle.plugin-test-dependency-helper")
+}
+
+group = "sample"
+version = "0.1"
+
+gradlePlugin {
+    plugins {
+        register("sample") {
+            id = "sample"
+            implementationClass = "sample.SamplePlugin"
+        }
+    }
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
+
+dependencies {
+    testImplementation "org.junit.jupiter:junit-jupiter:5.7.1"
+}
