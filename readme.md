@@ -3,7 +3,7 @@
 #### Your plugin's build.gradle
 ```groovy
 plugins {
-    id 'com.stevenschoen.gradle.plugintestdependencyhelper'
+    id 'com.stevenschoen.gradle.plugin-test-dependency-helper'
 }
 ```
 #### Your test's generated settings.gradle
