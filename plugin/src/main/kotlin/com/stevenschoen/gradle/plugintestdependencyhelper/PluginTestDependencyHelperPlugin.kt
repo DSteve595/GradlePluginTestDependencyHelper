@@ -12,6 +12,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.testing.Test
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
@@ -49,7 +50,12 @@ class PluginTestDependencyHelperPlugin : Plugin<Project> {
     pluginTestMavenRepoDir: File,
     pluginVersion: Provider<String>,
   ) {
-//    val relativePluginTestMavenRepoDir = pluginTestMavenRepoDir.relativeTo(project.projectDir)
+    val version = this::class.java.classLoader.getResourceAsStream("version")!!
+      .use { it.readBytes().decodeToString() }
+    project.dependencies {
+      "testCompileOnly"("com.stevenschoen.gradle.plugin-test-dependency-helper:test-sources-api:$version")
+    }
+
     val outputDir = project.layout.buildDirectory.dir("generated/pluginTestHelperTestSources")
     val generateSourcesTaskProvider = project.tasks
       .register<TestHelperSourceGenerationTask>("generatePluginTestHelperSources") {
