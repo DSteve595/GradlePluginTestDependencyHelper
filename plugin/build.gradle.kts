@@ -3,6 +3,8 @@ plugins {
     `kotlin-dsl`
 }
 
+group = "com.stevenschoen.gradle.plugintestdependencyhelper"
+
 gradlePlugin {
     plugins {
         create("plugin-test-dependency-helper") {
