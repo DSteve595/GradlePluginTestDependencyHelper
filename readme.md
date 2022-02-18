@@ -16,12 +16,13 @@ pluginManagement.repositories {
 }
 ```
 <details>
-    <summary>Alternatively, you can declare the repository manually:</summary>
-    ```groovy
-    pluginManagement.repositories {
-        maven { url = "${PluginTestDependencyHelper.repositoryPath}" }
-    }
-    ```
+    <summary>Alternatively, you can declare the repository manually</summary>
+
+```groovy
+pluginManagement.repositories {
+    maven { url = "${PluginTestDependencyHelper.repositoryPath}" }
+}
+```
 </details>
 
 #### Your test's generated build.gradle
