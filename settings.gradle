@@ -12,5 +12,5 @@ dependencyResolutionManagement {
     }
 }
 
-includeBuild('plugin')
-include(':sample')
+include ':plugin'
+include ':test-sources-api'

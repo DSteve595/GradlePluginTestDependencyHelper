@@ -1,11 +1,7 @@
 plugins {
   `java-gradle-plugin`
   `kotlin-dsl`
-}
-
-allprojects {
-  group = "com.stevenschoen.gradle.plugin-test-dependency-helper"
-  version = "0.1-SNAPSHOT"
+  `maven-publish`
 }
 
 gradlePlugin {
