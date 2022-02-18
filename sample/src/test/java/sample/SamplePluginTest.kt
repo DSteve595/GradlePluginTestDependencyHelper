@@ -3,7 +3,6 @@ package sample
 import com.stevenschoen.gradle.plugintestdependencyhelper.PluginTestDependencyHelper
 import org.junit.jupiter.api.io.TempDir
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.File
