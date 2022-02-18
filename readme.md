@@ -9,12 +9,21 @@ plugins {
 #### Your test's generated settings.gradle
 ```groovy
 pluginManagement.repositories {
-    ${PluginTestDependencyHelper.repository}
+    ${PluginTestDependencyHelper.repositoryDeclaration}
     // Other repositories too. For example:
     gradlePluginPortal()
     mavenCentral()
 }
 ```
+<details>
+    <summary>Alternatively, you can declare the repository manually:</summary>
+    ```groovy
+    pluginManagement.repositories {
+        maven { url = "${PluginTestDependencyHelper.repositoryPath}" }
+    }
+    ```
+</details>
+
 #### Your test's generated build.gradle
 ```groovy
 plugins {
