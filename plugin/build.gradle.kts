@@ -4,6 +4,7 @@ plugins {
 }
 
 group = "com.stevenschoen.gradle.plugintestdependencyhelper"
+version = "0.1-SNAPSHOT"
 
 gradlePlugin {
     plugins {
