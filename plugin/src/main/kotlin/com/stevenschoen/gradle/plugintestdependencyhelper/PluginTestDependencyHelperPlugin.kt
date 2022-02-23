@@ -53,24 +53,24 @@ class PluginTestDependencyHelperPlugin : Plugin<Project> {
     val version = this::class.java.classLoader.getResourceAsStream("version")!!
       .use { it.readBytes().decodeToString() }
     project.dependencies {
-      "testCompileOnly"("com.stevenschoen.gradle.plugin-test-dependency-helper:test-sources-api:$version")
+      "testImplementation"("com.stevenschoen.gradle.plugin-test-dependency-helper:test-sources-api:$version")
     }
 
-    val outputDir = project.layout.buildDirectory.dir("generated/pluginTestHelperTestSources")
+    val outputDir = project.layout.buildDirectory.dir("generated/pluginTestHelperTestResources")
     val generateSourcesTaskProvider = project.tasks
-      .register<TestHelperSourceGenerationTask>("generatePluginTestHelperSources") {
+      .register<TestHelperResourceGenerationTask>("generatePluginTestHelperResources") {
         pluginTestMavenRepoPathProp.set(pluginTestMavenRepoDir.path)
         pluginVersionProp.set(pluginVersion)
         outputDirProp.set(outputDir)
       }
     project.extensions.getByType<JavaPluginExtension>().sourceSets.named("test") {
-      java.srcDir(generateSourcesTaskProvider.flatMap { it.outputDirProp })
+      resources.srcDir(generateSourcesTaskProvider.flatMap { it.outputDirProp })
     }
   }
 
 }
 
-abstract class TestHelperSourceGenerationTask : DefaultTask() {
+abstract class TestHelperResourceGenerationTask : DefaultTask() {
 
   @get:Input
   abstract val pluginTestMavenRepoPathProp: Property<String>
@@ -90,20 +90,12 @@ abstract class TestHelperSourceGenerationTask : DefaultTask() {
     val outputPackageDir = outputDir.resolve("com/stevenschoen/gradle/plugintestdependencyhelper")
     outputPackageDir.mkdirs()
 
-    outputPackageDir.resolve("PluginTestDependencyHelper.java")
-      .writeText(
-        //language=java
-        """
-          package com.stevenschoen.gradle.plugintestdependencyhelper;
-          
-          public class PluginTestDependencyHelper {
-            public static final String repositoryPath = "$pluginTestMavenRepoPath";
-            public static final String repositoryDeclaration =
-              "maven { url = uri(\"$pluginTestMavenRepoPath\") }";
-            public static final String pluginVersion = "$pluginVersion";
-          }
-        """.trimIndent()
-      )
+    outputPackageDir.resolve("repositoryDeclaration")
+      .writeText("maven { url = uri(\"$pluginTestMavenRepoPath\") }")
+    outputPackageDir.resolve("repositoryPath")
+      .writeText(pluginTestMavenRepoPath)
+    outputPackageDir.resolve("pluginVersion")
+      .writeText(pluginVersion)
   }
 
 }

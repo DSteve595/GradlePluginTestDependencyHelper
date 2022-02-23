@@ -10,3 +10,7 @@ java {
 publishing.publications.register(name, MavenPublication) {
     from components.java
 }
+
+dependencies {
+    implementation "commons-io:commons-io:2.11.0"
+}
