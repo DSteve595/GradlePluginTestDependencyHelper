@@ -3,6 +3,8 @@ package com.stevenschoen.gradle.plugintestdependencyhelper
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.repositories.MavenArtifactRepository
+import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.Property
@@ -16,19 +18,18 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
-import java.io.File
 
 class PluginTestDependencyHelperPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
-    val pluginTestMavenRepoDir = project.buildDir.resolve("pluginTestMaven")
+    val pluginTestMavenRepoDir = project.layout.buildDirectory.dir("pluginTestMaven")
 
     project.pluginManager.apply("maven-publish")
     with(project.extensions.getByType<PublishingExtension>()) {
       repositories {
         maven {
           name = "pluginTest"
-          url = project.uri(pluginTestMavenRepoDir)
+          setUrl(pluginTestMavenRepoDir)
         }
       }
     }
@@ -47,7 +48,7 @@ class PluginTestDependencyHelperPlugin : Plugin<Project> {
 
   private fun setupTestHelperSourceGeneration(
     project: Project,
-    pluginTestMavenRepoDir: File,
+    pluginTestMavenRepoDir: Provider<Directory>,
     pluginVersion: Provider<String>,
   ) {
     val version = this::class.java.classLoader.getResourceAsStream("version")!!
@@ -59,7 +60,7 @@ class PluginTestDependencyHelperPlugin : Plugin<Project> {
     val outputDir = project.layout.buildDirectory.dir("generated/pluginTestHelperTestResources")
     val generateSourcesTaskProvider = project.tasks
       .register<TestHelperResourceGenerationTask>("generatePluginTestHelperResources") {
-        pluginTestMavenRepoPathProp.set(pluginTestMavenRepoDir.path)
+        pluginTestMavenRepoPathProp.set(pluginTestMavenRepoDir.map { it.asFile.path })
         pluginVersionProp.set(pluginVersion)
         outputDirProp.set(outputDir)
       }
